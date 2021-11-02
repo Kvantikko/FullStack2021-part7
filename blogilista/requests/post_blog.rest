@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhdWtrbyIsImlkIjoiNjE4MTIyYTI5N2UxODExMjAzY2EzYTEwIiwiaWF0IjoxNjM1ODU4NzU4fQ.jPegici9rqanSZH0vDo_HmAXG0AABTyeI8scOC9Mo7c
+
+{
+    "title": "saukon elämää",
+    "author": "Heikki Silennoinen",
+    "url": "http://totallysafeblog.com/testi"
+}

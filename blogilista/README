@@ -1,0 +1,5 @@
+mongoose unique validator bug: https://github.com/blakehaswell/mongoose-unique-validator/issues/131
+
+to fix this, using previous versions instead:
+"mongoose": "^6.0.8"
+"mongoose-unique-validator": "^2.0.3"

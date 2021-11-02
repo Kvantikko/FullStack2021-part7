@@ -1,10 +1,13 @@
 const supertest = require('supertest')
 const mongoose = require('mongoose')
 const helper = require('./test_helper')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const { response } = require('express')
 
 
 beforeEach(async () => {
@@ -170,6 +173,114 @@ test('only likes can be modified', async () => {
   expect(modifiedBlog.author).not.toBe('Yritän M. Uuttaa')
   expect(modifiedBlog.url).not.toBe('Heh')
   expect(modifiedBlog.likes).not.toBe(likesAtStart)
+})
+
+describe('when there is initially one user at db', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+  })
+
+  test('creation fails with proper statuscode and message if username is too short', async () => {
+    const usersAtStart = await helper.usersInDb()
+    
+    const newUser = {
+      username: 'hh',
+      name: 'Heikki Heh',
+      password: 'salainen',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain(
+      `\`username\` (\`${newUser.username}\`) is shorter than the minimum allowed length (3)`)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).not.toContain(newUser.username)
+  })
+
+  test('creation fails with proper statuscode and message if username is not given', async () => {
+    const usersAtStart = await helper.usersInDb()
+    
+    const newUser = {
+      name: 'Heikki Heh',
+      password: 'salainen',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('\`username\` is required')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).not.toContain(newUser.username)
+  })
+
+  test('creation fails with proper statuscode and message if password is too short', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'heke',
+      name: 'Heikki Heh',
+      password: 'ss',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    console.log(result.body.error);
+    
+    expect(result.body.error).toContain('password is not defined or password is shorter than 3 characters')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).not.toContain(newUser.username)
+  })
+
+  test('creation fails with proper statuscode and message if password is not given', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'heke',
+      name: 'Heikki Heh'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    console.log(result.body.error);
+    
+    expect(result.body.error).toContain('password is not defined or password is shorter than 3 characters')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).not.toContain(newUser.username)
+  })
 })
 
 
