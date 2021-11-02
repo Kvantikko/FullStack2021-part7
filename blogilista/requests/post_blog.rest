@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNleGlzZXBwbyIsImlkIjoiNjE4MTM4N2M4MWEzNDljYmMxNTRlM2EzIiwiaWF0IjoxNjM1ODY4OTE4fQ.hdaxKBTq-WG1pcKrab77Q9z6b4eKKY54QwS0w7XVXBw
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhdWtrbyIsImlkIjoiNjE4MTIyYTI5N2UxODExMjAzY2EzYTEwIiwiaWF0IjoxNjM1ODkyMjk2fQ.Gi-wc5LKmMzB6oNHHUSQFGnFRK9GAqMLLZw4J6MG4oU
 
 {
-    "title": "faegaergfea",
-    "author": "Popy Boi",
+    "title": "testiblogi2",
+    "author": "Tomi Testaaja",
     "url": "http://totallysafeblog.com/testi"
 }
