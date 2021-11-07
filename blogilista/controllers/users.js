@@ -9,7 +9,6 @@ usersRouter.post('/', async (request, response) => {
     return response.status(400).json({
       error: 'password is not defined or password is shorter than 3 characters'
     })
-    //throw new Error('No password or password lenght < 3')
   }
 
   const saltRounds = 10

@@ -1,8 +1,5 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const { error } = require('../utils/logger')
-const jwt = require('jsonwebtoken')
 const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
@@ -43,14 +40,14 @@ blogsRouter.put('/:id', async (request, response, next) => {
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   
-  if (blog.user.toString() === request.user._id.toString()) {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
-  } else {
-    response.status(401).json({
+  if (blog.user === undefined || !(blog.user.toString() === request.user._id.toString()) ) {
+    response.status(401).json({ 
       error: 'you are not authorized to delete this blog'
-    })
+    })  
   }
+
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 module.exports = blogsRouter

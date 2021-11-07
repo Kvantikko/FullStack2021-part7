@@ -91,12 +91,12 @@ describe('total likes', () => {
 
 describe('favorite blog', () => {
     
-    test('when list has zero blogs', () => {
+    test('when list has zero blogs, is undefined', () => {
         const result = listHelper.favoriteBlog(listWithZeroBlog)
         expect(result).toEqual(undefined)
     })
 
-    test('when list has only one blog', () => {
+    test('when list has only one blog, is the one and only blog', () => {
         const result = listHelper.favoriteBlog(listWithOneBlog)
         expect(result).toEqual({
             title: listWithOneBlog[0].title,
@@ -117,12 +117,12 @@ describe('favorite blog', () => {
 
 describe('author with most blogs', () => {
     
-    test('when list has zero blogs', () => {    
+    test('when list has zero blogs, is undefined', () => {    
         const result = listHelper.mostBlogs(listWithZeroBlog)
         expect(result).toEqual(undefined)
     })
 
-    test('when list has only one blog', () => {    
+    test('when list has only one blog, is the one and only author', () => {    
         const result = listHelper.mostBlogs(listWithOneBlog)
         expect(result).toEqual({
             author: 'Edsger W. Dijkstra',
@@ -130,7 +130,7 @@ describe('author with most blogs', () => {
         })
     })
 
-    test('when list has many blogs', () => {    
+    test('when list has many blogs, finds the author with most blogs', () => {    
         const result = listHelper.mostBlogs(blogs)
         expect(result).toEqual({
             author: "Robert C. Martin",
@@ -141,12 +141,12 @@ describe('author with most blogs', () => {
 
 describe('author with most blog likes', () => {
     
-    test('when list has zero blogs', () => {
+    test('when list has zero blogs, is undefined', () => {
         const result = listHelper.mostLikes(listWithZeroBlog)
         expect(result).toEqual(undefined)
     })
 
-    test('when list has only one blog', () => {
+    test('when list has only one blog, is the one and only author', () => {
         const result = listHelper.mostLikes(listWithOneBlog)
         expect(result).toEqual({
             author: 'Edsger W. Dijkstra',
@@ -154,7 +154,7 @@ describe('author with most blog likes', () => {
           })
     })
     
-    test('when list has many blogs', () => {        
+    test('when list has many blogs, finds the author with most blog likes', () => {        
         const result = listHelper.mostLikes(blogs)
         expect(result).toEqual({
             author: "Edsger W. Dijkstra",

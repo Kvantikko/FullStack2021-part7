@@ -11,7 +11,7 @@ const requestLogger = (request, response, next) => {
 }
 
 const tokenExtractor = (request, response, next) => {
-  console.log('IN TOKEN EXTRACTOR');
+  //console.log('IN TOKEN EXTRACTOR')
   request.token = null
 
   const authorization = request.get('authorization')
@@ -23,10 +23,8 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-  //console.log('IN USER EXTRACTOR');
+  //console.log('IN USER EXTRACTOR')
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  //console.log('decodedid', decodedToken);
-  //console.log('decodedid', decodedToken.id);
   request.user = await User.findById(decodedToken.id)
   
   next()
