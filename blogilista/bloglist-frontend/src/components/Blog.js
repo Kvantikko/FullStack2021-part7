@@ -27,14 +27,7 @@ const Blog = ({
 
   const addLike = (event) => {
     event.preventDefault()
-    updateLikes({
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id,
-      id: blog.id
-    })
+    updateLikes(blog)
   }
 
   const deleteBlog = (event) => {
