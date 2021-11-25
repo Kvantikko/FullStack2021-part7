@@ -1,9 +1,10 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 }).populate('comments', { content: 1 })
   response.json(blogs.map(blog => blog.toJSON()))
 })
 
@@ -19,11 +20,41 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response, next) 
   })
 
   const savedBlog = await blog.save()
-
   user.blogs = user.blogs.concat(savedBlog._id)
-  await user.save()
+  const savedUser = await user.save()
   
-  response.json(savedBlog.toJSON())
+  // reformatting the response to include user.username and user.name 
+  const { blogs, ...rest } = savedUser.toJSON();
+  const responseBlog = { ...savedBlog.toJSON(), user: rest }
+
+  response.json(responseBlog)
+})
+
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+  console.log('IN ROUTER COMMENTS')
+  
+  const blog = await Blog.findById(request.params.id)
+  
+  
+  
+  console.log('REQUEST ', request.body)
+  console.log('BLOG', blog)
+  
+  const comment = new Comment({
+    content: request.body.content,
+    blog: request.params.id
+  })
+
+
+
+  console.log('COMMENT', comment)
+  
+
+  const savedComment = await comment.save()
+  blog.comments = blog.comments.concat(savedComment._id)
+  await blog.save()
+  
+  response.json(savedComment)
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
