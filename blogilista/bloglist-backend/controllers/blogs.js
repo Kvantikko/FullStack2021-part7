@@ -31,29 +31,14 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response, next) 
 })
 
 blogsRouter.post('/:id/comments', async (request, response, next) => {
-  console.log('IN ROUTER COMMENTS')
-  
   const blog = await Blog.findById(request.params.id)
-  
-  
-  
-  console.log('REQUEST ', request.body)
-  console.log('BLOG', blog)
-  
   const comment = new Comment({
     content: request.body.content,
     blog: request.params.id
   })
-
-
-
-  console.log('COMMENT', comment)
-  
-
   const savedComment = await comment.save()
   blog.comments = blog.comments.concat(savedComment._id)
   await blog.save()
-  
   response.json(savedComment)
 })
 
@@ -64,6 +49,7 @@ blogsRouter.put('/:id', async (request, response, next) => {
 })
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
+  const user = request.user
   const blog = await Blog.findById(request.params.id)
   
   if (blog.user === undefined || !(blog.user.toString() === request.user._id.toString()) ) {
@@ -72,7 +58,11 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
     })  
   }
 
-  await Blog.findByIdAndRemove(request.params.id)
+  await blog.remove()
+  console.log('ENNEN',user.blogs)
+  user.blogs = user.blogs.filter(b => b._id.toString() !== request.params.id.toString())
+  await user.save()
+  console.log('JÄLKEEN',user.blogs)
   response.status(204).end()
 })
 

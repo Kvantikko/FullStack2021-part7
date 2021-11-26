@@ -9,7 +9,7 @@ const Blog = ({ blog, showMore }) => {
 
   const dispatch = useDispatch()
   const history = useHistory()
-
+  /*
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -17,7 +17,7 @@ const Blog = ({ blog, showMore }) => {
     borderWidth: 1,
     marginBottom: 5,
   }
-
+*/
   const addLike = (event) => {
     event.preventDefault()
     dispatch(like(blog))
@@ -67,7 +67,7 @@ const Blog = ({ blog, showMore }) => {
     }
 
     return(
-      <div className='blogShowMore' style={blogStyle}>
+      <div className='blogShowMore'>
         <h2>{blog.title} | {blog.author}</h2>
         <div>
           <a href={blog.url}>{blog.url}</a>
@@ -98,11 +98,16 @@ const Blog = ({ blog, showMore }) => {
   }
 
   return(
-    <div style={blogStyle}>
-      <Link to={`blogs/${blog.id}`} className='blog' >
-        {blog.title} | {blog.author}
-      </Link>
-    </div>
+    <tr>
+      <td>
+        <Link to={`blogs/${blog.id}`} className='blog' >
+          {blog.title}  {blog.author}
+        </Link>
+      </td>
+      <td>
+        {blog.author}
+      </td>
+    </tr>
   )
 }
 

@@ -15,6 +15,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/loggedUserReducer'
 import { initializeUsers } from './reducers/userReducer'
+import { Navbar, Nav } from 'react-bootstrap'
 
 
 const App = () => {
@@ -84,7 +85,7 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
+      <div className="container">
         <h2>Log in to application</h2>
         <Notification/>
         <LoginForm handleLogin={handleLogin}
@@ -96,13 +97,28 @@ const App = () => {
   }
 
   return (
-    <div>
-      <div>
-        <Link style={{ padding: 5 }} to="/blogs">blogs</Link>
-        <Link style={{ padding: 5 }} to="/users">users</Link>
-        {user.name} logged in <button onClick={handleLogout} type="submit">logout</button>
-      </div>
-      <h2>Blogs App</h2>
+    <div className="container">
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#" as="span">
+              <Link style={{ padding: 5 }} to="/blogs">blogs</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={{ padding: 5 }} to="/users">users</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              {user
+                ? <em>{user.name} logged in</em>
+                : <Link to="/login">login</Link>
+              }
+              <button onClick={handleLogout} type="submit" style={{ marginLeft: 20 }}>logout</button>
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      <h2 style={{ marginTop: 20, marginBottom: 30 }} >Blogs App</h2>
       <Notification/>
       <p></p>
       <Switch>
