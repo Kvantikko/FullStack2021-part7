@@ -1,5 +1,7 @@
 import blogService from '../services/blogs'
 import { setNotification } from '../reducers/notificationReducer'
+import { addBlogToUser, removeBlogFromUser } from '../reducers/userReducer'
+
 
 const blogReducer = (state = [], action) => {
   switch (action.type) {
@@ -65,16 +67,9 @@ export const like = (blogObject) => {
 }
 
 export const newComment = (comment, blogObject) => {
-  console.log('OBJECT ', blogObject )
-  console.log('COMMENT ', comment)
-
-
   return async dispatch => {
     try {
       const addedComment =  await blogService.comment(blogObject.id, { content: comment, blog: blogObject.id })
-      console.log('RESPONSE ',addedComment)
-
-
       dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} commented!`, 5, false))
       dispatch({
         type:'COMMENT',
@@ -88,7 +83,7 @@ export const newComment = (comment, blogObject) => {
   }
 }
 
-export const create = (blogObject) => {
+export const create = (blogObject, hideBlogForm) => {
   return async dispatch => {
     try {
       const newBlog = await blogService.createNew(blogObject)
@@ -97,6 +92,8 @@ export const create = (blogObject) => {
         type:'NEW_BLOG',
         data: newBlog
       })
+      dispatch(addBlogToUser(newBlog))
+      hideBlogForm()
     } catch(error) {
       console.log(error)
       dispatch(setNotification(`Blog creation failed. ${error}. Title, author and url are required!`, 5, true))
@@ -113,6 +110,7 @@ export const remove = (blogObject) => {
         type: 'DELETE_BLOG',
         data: blogObject.id
       })
+      dispatch(removeBlogFromUser(blogObject))
     } catch (error) {
       console.log(error)
       dispatch(setNotification(`Blog deletion failed. ${error}`, 5, true))

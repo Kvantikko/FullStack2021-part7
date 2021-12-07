@@ -1,10 +1,10 @@
 import { React, useState } from 'react'
 import { create } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
-//import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Row, Col } from 'react-bootstrap'
 
 
-const BlogForm = () => {
+const BlogForm = ({ hideBlogForm }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -18,7 +18,7 @@ const BlogForm = () => {
       author: author,
       url: url
     }
-    dispatch(create(blog))
+    dispatch(create(blog, hideBlogForm))
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -26,79 +26,51 @@ const BlogForm = () => {
 
   return (
     <div>
-      <h2>create new</h2>
+      <form onSubmit={addBlog}>
+        <Button style={{ marginBottom: 15 }} variant="success" type="submit">
+          create new
+        </Button>
+        <Form.Group as={Row} className="mb-3" >
+          <Form.Label column sm={2} >Title</Form.Label>
+          <Col sm={8}>
+            <Form.Control
+              id='title'
+              type="text"
+              value={title}
+              name="Title"
+              onChange={({ target }) => setTitle(target.value)}
+            />
+          </Col>
+        </Form.Group>
 
-      <form id='onSubmit' onSubmit={addBlog}>
-        <div>
-        title:
-          <input
-            id='title'
-            type="text"
-            value={title}
-            name="Title"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-        author:
-          <input
-            id='author'
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-        url:
-          <input
-            id='url'
-            type="text"
-            value={url}
-            name="Url"
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button id="submitBlog" type="submit">create</button>
+        <Form.Group as={Row} className="mb-3" >
+          <Form.Label column sm={2} >Author</Form.Label>
+          <Col sm={8}>
+            <Form.Control
+              id='author'
+              type="text"
+              value={author}
+              name="Author"
+              onChange={({ target }) => setAuthor(target.value)}
+            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" >
+          <Form.Label column sm={2} >Url</Form.Label>
+          <Col sm={8}>
+            <Form.Control
+              id='url'
+              type="text"
+              value={url}
+              name="Url"
+              onChange={({ target }) => setUrl(target.value)}
+            />
+          </Col>
+        </Form.Group>
       </form>
     </div>
   )
-  /*
-  return (
-    <form onSubmit={addBlog}>
-      <Form.Group>
-        <Form.Label>title</Form.Label>
-        <Form.Control
-          id='title'
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-        <Form.Label>author</Form.Label>
-        <Form.Control
-          id='author'
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-        <Form.Label>url</Form.Label>
-        <Form.Control
-          id='url'
-          type="text"
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-        <Button variant="primary" type="submit">
-          login
-        </Button>
-      </Form.Group>
-    </form>
-  )
-  */
-
 
 }
 

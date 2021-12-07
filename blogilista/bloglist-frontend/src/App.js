@@ -15,7 +15,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/loggedUserReducer'
 import { initializeUsers } from './reducers/userReducer'
-import { Navbar, Nav } from 'react-bootstrap'
+import { Navbar, Nav, Button } from 'react-bootstrap'
 
 
 const App = () => {
@@ -44,7 +44,6 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
     try {
       const user = await loginService.login({
         username, password,
@@ -57,13 +56,16 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      dispatch(setNotification('Wrong username or password', 5, true))
+      if (exception.toString().includes('code 500')) {
+        dispatch(setNotification(exception.toString() + ', username and password might be right but there is a problem with the server', 7, true))
+      } else {
+        dispatch(setNotification('Wrong username or password', 5, true))
+      }
     }
   }
 
   const handleLogout = async (event) => {
     event.preventDefault()
-    console.log('logging out')
     window.localStorage.clear()
     blogService.setToken(null)
     dispatch(setUser(null))
@@ -81,12 +83,15 @@ const App = () => {
     : null
 
 
+  const toggleBlogForm = () => {
+    blogFormRef.current.toggleVisibility()
+  }
   const blogFormRef = useRef()
 
   if (user === null) {
     return (
       <div className="container">
-        <h2>Log in to application</h2>
+        <h2 style={{ margin: 50 }} >Log in to application</h2>
         <Notification/>
         <LoginForm handleLogin={handleLogin}
           username={username} handleUsernameChange={setUsername}
@@ -94,6 +99,15 @@ const App = () => {
         />
       </div>
     )
+  }
+
+  const headerStyle = {
+    fontFamily: 'Courier New',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 30,
+    marginBottom: 30,
+    color: '#4682B4',
   }
 
   return (
@@ -108,17 +122,16 @@ const App = () => {
             <Nav.Link href="#" as="span">
               <Link style={{ padding: 5 }} to="/users">users</Link>
             </Nav.Link>
-            <Nav.Link href="#" as="span">
-              {user
-                ? <em>{user.name} logged in</em>
-                : <Link to="/login">login</Link>
-              }
-              <button onClick={handleLogout} type="submit" style={{ marginLeft: 20 }}>logout</button>
-            </Nav.Link>
+          </Nav>
+          <Nav className="ml-auto">
+            <Navbar.Text href="#" as="span">
+              <em>{user.name} logged in</em>
+            </Navbar.Text>
+            <Button onClick={handleLogout} type="submit" style={{ marginLeft: 20 }}>logout</Button>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <h2 style={{ marginTop: 20, marginBottom: 30 }} >Blogs App</h2>
+      <h1 style={headerStyle} >THE ULTIMATE BLOGS APP</h1>
       <Notification/>
       <p></p>
       <Switch>
@@ -133,7 +146,7 @@ const App = () => {
         </Route>
         <Route path="/">
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-            <BlogForm />
+            <BlogForm hideBlogForm={toggleBlogForm} />
           </Togglable>
           <BlogList/>
         </Route>

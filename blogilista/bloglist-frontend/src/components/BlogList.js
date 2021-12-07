@@ -9,6 +9,10 @@ const BlogList = () => {
   return(
     <Table striped style={{ marginTop: 40 }} >
       <tbody>
+        <tr>
+          <th >BLOG</th>
+          <th style={{ textAlign: 'right' }} >AUTHOR</th>
+        </tr>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}

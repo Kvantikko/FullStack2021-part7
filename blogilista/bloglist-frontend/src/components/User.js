@@ -9,12 +9,19 @@ const User = ({ user, showMore }) => {
   if (showMore) {
     return(
       <div>
-        <h2>{user.name}</h2>
-        <h3>added blogs</h3>
-        <div style={{ paddingLeft: 15 }}>
-          {user.blogs.map(blog =>
-            <li key={blog.id} >{blog.title}</li>
-          )}
+        <h2 style={{ textAlign: 'center' }} >{user.name}</h2>
+        <h3 style={{ textAlign: 'center', fontSize: 25, margin: 12 }} >Added blogs</h3>
+        <div style={{ textAlign: 'center' }} >
+          <div style={{  display: 'inline-block', textAlign: 'left', marginTop: 30 }}>
+            {user.blogs.length !== 0
+              ?
+              user.blogs.map(blog =>
+                <li key={blog.id} >{blog.title}</li>
+              )
+              :
+              <div style={{ textAlign: 'center', fontSize: 20 }} >This user has not added any blogs yet</div>
+            }
+          </div>
         </div>
       </div>
     )
@@ -22,8 +29,8 @@ const User = ({ user, showMore }) => {
 
   return(
     <tr>
-      <td> <Link to={`users/${user.id}`}>{user.name}</Link></td>
-      <td> {user.blogs.length} </td>
+      <td style={{ textAlign: 'center' }} > <Link to={`users/${user.id}`}>{user.name}</Link></td>
+      <td style={{ textAlign: 'center' }} > {user.blogs.length} </td>
     </tr>
   )
 }

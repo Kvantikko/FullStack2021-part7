@@ -2,6 +2,7 @@ import { React, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { like, newComment, remove } from '../reducers/blogReducer'
 import { Link, useHistory } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
 
 const Blog = ({ blog, showMore }) => {
   const user = useSelector(state => state.user)
@@ -39,14 +40,16 @@ const Blog = ({ blog, showMore }) => {
 
   const renderComments = () => {
     if(blog.comments.length === 0) {
-      return null
+      return <div style={{ fontSize: 20,  }} >No comments yet</div>
     }
 
     return(
-      <div style={{ paddingLeft: 15 }}>
-        {blog.comments.map(comment =>
-          <li key={comment.id} >{comment.content}</li>
-        )}
+      <div style={{ margingLeft: 'auto', margingRight: 'auto' }}>
+        <div style={{ display: 'inline-block', textAlign: 'left', marginRight: 150 }}>
+          {blog.comments.map(comment =>
+            <li key={comment.id} >{comment.content}</li>
+          )}
+        </div>
       </div>
     )
   }
@@ -56,7 +59,7 @@ const Blog = ({ blog, showMore }) => {
       return null
     } else {
       return(
-        <button id="remove-button" onClick={deleteBlog}>remove</button>
+        <Button style={{ margin: 10 }} id="remove-button" onClick={deleteBlog}>remove blog</Button>
       )
     }
   }
@@ -67,21 +70,23 @@ const Blog = ({ blog, showMore }) => {
     }
 
     return(
-      <div className='blogShowMore'>
+      <div className='blogShowMore' style={{ textAlign: 'center' }}>
         <h2>{blog.title} | {blog.author}</h2>
         <div>
-          <a href={blog.url}>{blog.url}</a>
+          <a style={{ fontSize: 30 }} href={blog.url}>{blog.url}</a>
         </div>
-        <div id="likes">
-          likes: {blog.likes} <button id="like-button" onClick={addLike}>like</button>
+        <div style={{ margin: 5, fontSize: 20 }} >
+          <div style={{ margin: 5 }} id="likes">
+            This blog has {blog.likes} likes<Button style={{ margin: 10 }} id="like-button" onClick={addLike}>like</Button>
+          </div>
+          <div>
+            Blog added by {blog.user.name}
+          </div>
+          <div>
+            {removeButton()}
+          </div>
         </div>
-        <div>
-          added by {blog.user.name}
-        </div>
-        <div>
-          {removeButton()}
-        </div>
-        <h3>comments</h3>
+        <h3 style={{ marginTop: 30 }} >Comments</h3>
         <div>
           <form id='onSubmit' onSubmit={addComment}>
             <input
@@ -89,7 +94,7 @@ const Blog = ({ blog, showMore }) => {
               value={comment}
               onChange={({ target }) => setComment(target.value)}
             />
-            <button type="submit">add comment</button>
+            <Button style={{ margin: 10 }} type="submit">add comment</Button>
           </form>
         </div>
         {renderComments()}
@@ -99,12 +104,12 @@ const Blog = ({ blog, showMore }) => {
 
   return(
     <tr>
-      <td>
+      <td >
         <Link to={`blogs/${blog.id}`} className='blog' >
-          {blog.title}  {blog.author}
+          {blog.title}
         </Link>
       </td>
-      <td>
+      <td style={{ textAlign: 'right' }}>
         {blog.author}
       </td>
     </tr>

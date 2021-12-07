@@ -11,7 +11,7 @@ const LoginForm = ({
 }) => {
 
   return (
-    <form onSubmit={handleLogin}>
+    <form style={{ margin: 50 }} onSubmit={handleLogin}>
       <Form.Group>
         <Form.Label>username:</Form.Label>
         <Form.Control
@@ -27,7 +27,7 @@ const LoginForm = ({
           value={password}
           onChange={({ target }) => handlePasswordChange(target.value)}
         />
-        <Button variant="primary" type="submit">
+        <Button style={{ marginTop: 30 }} variant="primary" type="submit">
           login
         </Button>
       </Form.Group>
